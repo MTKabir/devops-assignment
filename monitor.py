@@ -8,9 +8,20 @@ PROCESSED_FOLDER = "./processed"
 # and then i will read the csv file and then move the file to the processed folder
 
 def job():
-    print("Process file from incoming folder and move it to the processed folder")
     csv_files = [file for file in os.listdir(INCOMING_FOLDER) if file.endswith(".csv")]
-    for filename in csv_files:
-        os.rename(os.path.join(INCOMING_FOLDER, filename), os.path.join(PROCESSED_FOLDER, filename))
+    
+    if len(csv_files) == 0:
+        print("no csv file in the incoming folder")
+    elif len(csv_files) == 1:
+        filename = csv_files[0]
+        source_path = os.path.join(INCOMING_FOLDER, filename)
+        destination_path = os.path.join(PROCESSED_FOLDER, filename)
+        os.rename(source_path, destination_path)
+        print("csv file moved to the processed folder")
+    else:
+        print("more than one csv file in the incoming folder which is not allowed")
 
 schedule.every().seconds.do(job)
+
+while True:
+    schedule.run_pending()
