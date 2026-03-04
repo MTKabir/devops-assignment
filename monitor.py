@@ -1,14 +1,10 @@
-import schedule,os,logging,time
+import schedule,os,time
 from datetime import date, datetime
+from logger import logger
 
 PROCESSED_FOLDER = "./processed"
-# create our custom logger
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-handler = logging.FileHandler("logs.log")
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-handler.setFormatter(formatter)
-logger.addHandler(handler)  
+EXECUTION_TIME = "23:48"
+logger = logger()
 
 def job():
     logger.info("Monitoring job started")
@@ -39,7 +35,7 @@ def job():
 
     logger.info("Monitoring job finished")
 
-schedule.every().day.at("20:16").do(job)
+schedule.every().day.at(EXECUTION_TIME).do(job)
 
 while True:
     schedule.run_pending()

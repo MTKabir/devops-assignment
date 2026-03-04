@@ -1,17 +1,11 @@
-import os,csv,sqlite3,logging,schedule,time,shutil
+import os,csv,sqlite3,logging,shutil,schedule,time
+from logger import logger
 
 INCOMING_FOLDER = "./incoming"
 PROCESSED_FOLDER = "./processed"
+EXECUTION_TIME = "23:25"
+logger = logger()
 
-# custom logger to log the processing steps and errors
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-
-handler = logging.FileHandler("logs.log")
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-handler.setFormatter(formatter)
-
-logger.addHandler(handler)
 
 # reads and processes the data from a file into a database, then moves the file to the processed directory when finished
 def process_file():
@@ -62,8 +56,7 @@ def process_file():
     else:
         logger.info("more than one csv file in the incoming folder which is not allowed")
 
-
-schedule.every().day.at("19:15").do(process_file)
+schedule.every().day.at(EXECUTION_TIME).do(process_file)
 
 while True:
     schedule.run_pending()
